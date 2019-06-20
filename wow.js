@@ -23,10 +23,7 @@ req.on('error', function(e) {
 });
 // write data to request body
 var datatt = JSON.stringify({
-  "name":"test2",
-  "geo_json":{
-    "type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[-104.974844,39.702234],[-104.97493,39.707352],[-104.968393,39.707297],[-104.9683,39.702317],[-104.974844,39.702234]]]}}]}
-  
-});
+  "name":"test4",
+  "geo_json":{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[-111.467,44.30192],[-111.46849,44.27506],[-111.43713,44.27424],[-111.43724,44.29996],[-111.467,44.30192]]]}}});
 req.write(datatt);
 req.end();
