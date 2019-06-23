@@ -1,5 +1,6 @@
 let http = require("http");
 let fs = require('fs');
+let nameArr = [];
 
 function getSatData(startDate,endDate,polyId,APId){ //this pulls the JSON data on Apple stock from Alphavantage and returns the JSON
     return new Promise(function(resolve, reject){
@@ -46,6 +47,9 @@ async function getI(data,num){
     console.log(IMGurl);
     let UNIdate = data[num]['dt'];
     let dateN = timeConverter(UNIdate);
+    dateN += data[num]['type'].substring(0,3)+"[TR]";
+    nameArr[num] = dateN;
+
     options = {
             host: 'api.agromonitoring.com'
           , port: 80
@@ -70,7 +74,7 @@ async function getI(data,num){
     
 }
 async function getImages(){
-    let JSONdata = await getSatData("1501087271","1561087271","5d0c5b746dae90003461d21d","cda3de7380c305987a9346a110328670");
+    let JSONdata = await getSatData("1401087271","1561087271","5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
     let options;
     let numI = JSONdata.length;
     console.log(numI);
@@ -78,6 +82,9 @@ async function getImages(){
     for(let i =0; i<numI; i++){
         await getI(JSONdata,i);
     }
+    let data = JSON.stringify(nameArr);
+    fs.writeFileSync('./aspen/nameArray.json', data);  
+
     
 }
 getImages();
