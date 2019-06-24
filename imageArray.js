@@ -6,17 +6,26 @@ function getName(num){
   let parsedNarr = JSON.parse(nameArr);
   return parsedNarr[num];
 }
-/*getPixels("logo.png", function(err, pixels) {
+let nameArr = fs.readFileSync('./aspen/nameArray.json');
+let parsedNarr = JSON.parse(nameArr);
+let imgArr =[];
+
+for(let i = 0; i<parsedNarr.length; i++){
+getPixels("./aspen/"+getName(i)+".png", function(err, pixels) {
   if(err) {
     console.log("Bad image path")
     return
   }
-  let testArr =[];
   for(let i = 0; i<pixels.data.length; i++){
-    testArr.push(pixels.data[i]+" "+pixels.data[i+1]+" "+pixels.data[i+2]+" "+pixels.data[i+3]);
+    let subArr = [pixels.data[i],pixels.data[i+1],pixels.data[i+2],pixels.data[i+3]];
+    imgArr.push(subArr);
     i+=4;
   }
-  console.log("got pixels", testArr);
+  console.log(i+": "+imgArr.length);
 })
-*/
-console.log(getName(2));
+}
+
+for(let i = 0;i<imgArr.length;i++){
+  let totalpixValue = imgArr[i][0]+imgArr[i][1]+imgArr[i][2]+imgArr[i][3];
+  console.log(i + ": "+ totalpixValue);
+}
