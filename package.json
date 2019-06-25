@@ -1,0 +1,23 @@
+{
+  "name": "koala",
+  "version": "1.0.0",
+  "description": "",
+  "main": "JSONdata.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MSL19/koala.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MSL19/koala/issues"
+  },
+  "homepage": "https://github.com/MSL19/koala#readme",
+  "dependencies": {
+    "get-pixels": "^3.3.2",
+    "jimp": "^0.6.4"
+  }
+}
