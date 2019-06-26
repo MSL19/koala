@@ -23,10 +23,10 @@ req.on('error', function(e) {
 });
 // write data to request body
 var datatt = JSON.stringify({
-  "name":"mtElbert",
+  "name":"copperLake",
   "geo_json":
 
-  {"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[-104.967749,39.81352],[-104.96855,39.804469],[-104.960268,39.803623],[-104.958594,39.813366],[-104.967749,39.81352]]]}}]}
+  {"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[-106.918631,38.998766],[-106.911535,38.997833],[-106.920519,38.982629],[-106.937227,38.988453],[-106.918631,38.998766]]]}}]}
 
 });
 req.write(datatt);
