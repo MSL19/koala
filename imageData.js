@@ -1,7 +1,7 @@
 let http = require("http");
 let fs = require('fs');
 let nameArr = [];
-
+console.log(Date.now()/1000);
 function getSatData(startDate,endDate,polyId,APId){ //this pulls the JSON data on Apple stock from Alphavantage and returns the JSON
     return new Promise(function(resolve, reject){
         let request = http.request({
@@ -74,7 +74,7 @@ async function getI(data,num){
     
 }
 async function getImages(){
-    let JSONdata = await getSatData("1401087271","1561087271","5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
+    let JSONdata = await getSatData("1401087271",Math.floor(Date.now()/1000),"5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
     let options;
     let numI = JSONdata.length;
     console.log(numI);

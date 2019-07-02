@@ -35,25 +35,40 @@ async function hashAnalysis(){
 
     console.log(parsedNarrL.length);
         for(let i = 0; i<parsedNarrL.length; i++){
-            getHash(i);
+            getHash(i, parsedNarrL.length);
         }
 
     hashArr.sort(function(b,a){return a.imHash - b.imHash});
-    for(let i = 0; i<parsedNarrL; i++){
-        console.log(hashArr[i]);
-    }
+
 }
 hashAnalysis();
 
-
-async function getHash(num){
+async function getHash(num, stop){
     await Jimp.read("./aspen/"+getName(num)+".png", function (err, image){
         // console.log(image.hash(10));
          hashArr.push({imHash:parseInt(image.hash(10)),imName:getName(num)});
          
-        // if(num === 77)console.log(hashArr);
+         if(num === stop-1){
+             console.log(hashArr);
+             hashArr.sort(function(b,a){return a.imHash - b.imHash});
+             console.log("THis should be sorted...");
+
+             console.log(hashArr);
+             reorderImages();
+
+
+         }
  
      });
 }
 
+function reorderImages(){
+    console.log(hashArr.length);
+    for(let i = 0; i<hashArr.length; i++){
+        fs.rename('./aspen/'+hashArr[i].imName+'.png', './aspen/'+i+hashArr[i].imName+'.png', function (err) {
+            if (err) throw err;
+            console.log('renamed complete');
+          });
+    }
+}
 
