@@ -1,12 +1,8 @@
 var Jimp = require('jimp');
 let fs = require('fs');
 let hashArr = [];
-function getName(num){
-    let nameArr = fs.readFileSync('./aspen/nameArray.json');
-    let parsedNarr = JSON.parse(nameArr);
-    return parsedNarr[num];
-  }
-async function blueCheck(){
+
+async function blueCheck(){ //depreciated
     var brightestArr = [];
     var hasBlue = false;
     await Jimp.read("./aspen/2019+06Jun+10+18+0+0Sen[TR].png", function (err, image) {
@@ -33,34 +29,38 @@ async function hashAnalysis(){
     let nameArrL = fs.readFileSync('./aspen/nameArray.json');
     let parsedNarrL = JSON.parse(nameArrL);
 
-    console.log(parsedNarrL.length);
+    console.log("Number of images: "+parsedNarrL.length);
         for(let i = 0; i<parsedNarrL.length; i++){
-            getHash(i, parsedNarrL.length);
+            getHash(i, parsedNarrL.length, parsedNarrL[i]);
         }
 
-    hashArr.sort(function(b,a){return a.imHash - b.imHash});
+    hashArr.sort(function(b,a){return a.imHash - b.imHash}); // sorts the images in the array based off of their hashed values
 
 }
 hashAnalysis();
 
-async function getHash(num, stop){
-    await Jimp.read("./aspen/"+getName(num)+".png", function (err, image){
+async function getHash(num, stop, name){
+    await Jimp.read("./sortedByHash/"+name+".png", function (err, image){
         let hasBlue = false;
+        let hasBlue2 =false;
         for(let i = 0; i<image.bitmap.height; i++){
             for(let j =0;j<image.bitmap.width; j++){
                     if(Jimp.intToRGBA(image.getPixelColor(j, i))['r']<=156&&Jimp.intToRGBA(image.getPixelColor(j, i))['r']>=127&&Jimp.intToRGBA(image.getPixelColor(j, i))['g']>=115&&Jimp.intToRGBA(image.getPixelColor(j, i))['g']<=155&&Jimp.intToRGBA(image.getPixelColor(j, i))['b']>=126&&Jimp.intToRGBA(image.getPixelColor(j, i))['b']<=162){
                         hasBlue = true;
                     }
+                    if(Jimp.intToRGBA(image.getPixelColor(j, i))['r']<=127&&Jimp.intToRGBA(image.getPixelColor(j, i))['r']>=122&&Jimp.intToRGBA(image.getPixelColor(j, i))['g']>=135&&Jimp.intToRGBA(image.getPixelColor(j, i))['g']<=146&&Jimp.intToRGBA(image.getPixelColor(j, i))['b']>=142&&Jimp.intToRGBA(image.getPixelColor(j, i))['b']<=147){
+                        hasBlue2 = true;
+                    }
             }
         }
-         hashArr.push({hasBl:hasBlue,imHash:parseInt(image.hash(10)),imName:getName(num)});
-         
+         hashArr.push({hasBl:hasBlue,hasBl2: hasBlue2, imHash:parseInt(image.hash(10)),imName:name});
+         console.log(name);
          if(num === stop-1){
-             console.log(hashArr);
+           //  console.log(hashArr);
              hashArr.sort(function(b,a){return a.imHash - b.imHash});
              console.log("THis should be sorted...");
 
-             console.log(hashArr);
+             //console.log(hashArr);
              reorderImages();
 
 
@@ -70,13 +70,18 @@ async function getHash(num, stop){
 }
 
 function reorderImages(){
-    console.log(hashArr.length);
+    
+
+    console.log("Hashed array length (should be the same as the normal image array length): "+hashArr.length);
     for(let i = 0; i<hashArr.length; i++){
         let blueString = "false";
+        let blueString2 = "false";
+
         if(hashArr[i].hasBl)blueString = "true";
-        fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+i+hashArr[i].imName+blueString+'.png', function (err) {
+        if(hashArr[i].hasBl2)blueString2 = "true";
+        fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+i+hashArr[i].imName+blueString+blueString2+'.png', function (err) {
             if (err) throw err;
-            console.log('renamed complete');
+            console.log('rename complete');
           });
     }
 }
