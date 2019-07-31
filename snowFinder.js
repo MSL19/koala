@@ -46,7 +46,7 @@ async function hashAnalysis(){
     
             if(hashArr[i].hasBl)blueString = "true";
             if(hashArr[i].hasBl2)blueString2 = "true";
-            fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+i+hashArr[i].imName+blueString+blueString2+'.png', function (err) {
+            fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+hashArr[i].imHash/hashArr[parsedNarrL.length-1].imHash+hashArr[i].imName+blueString+blueString2+'.png', function (err) {
                 if (err) throw err;
                 console.log('rename complete');
               });
@@ -74,9 +74,9 @@ async function getHash(num, stop, name){
          if(num === stop-1){
            //  console.log(hashArr);
              hashArr.sort(function(b,a){return a.imHash - b.imHash});
-             console.log("THis should be sorted...");
+             console.log(num+ "THis should be sorted...");
 
-             //console.log(hashArr);
+             console.log(hashArr);
           //  reorderImages();
 
 
