@@ -32,10 +32,26 @@ async function hashAnalysis(){
     console.log("Number of images: "+parsedNarrL.length);
         for(let i = 0; i<parsedNarrL.length; i++){
             getHash(i, parsedNarrL.length, parsedNarrL[i]);
+            console.log(i);
         }
 
     hashArr.sort(function(b,a){return a.imHash - b.imHash}); // sorts the images in the array based off of their hashed values
+    setTimeout(function reorderImages(){
+    
 
+        console.log("Hashed array length (should be the same as the normal image array length): "+hashArr.length);
+        for(let i = 0; i<hashArr.length; i++){
+            let blueString = "false";
+            let blueString2 = "false";
+    
+            if(hashArr[i].hasBl)blueString = "true";
+            if(hashArr[i].hasBl2)blueString2 = "true";
+            fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+i+hashArr[i].imName+blueString+blueString2+'.png', function (err) {
+                if (err) throw err;
+                console.log('rename complete');
+              });
+        }
+    }, 15000)
 }
 hashAnalysis();
 
@@ -61,7 +77,7 @@ async function getHash(num, stop, name){
              console.log("THis should be sorted...");
 
              //console.log(hashArr);
-             reorderImages();
+          //  reorderImages();
 
 
          }
@@ -69,20 +85,5 @@ async function getHash(num, stop, name){
      });
 }
 
-function reorderImages(){
-    
 
-    console.log("Hashed array length (should be the same as the normal image array length): "+hashArr.length);
-    for(let i = 0; i<hashArr.length; i++){
-        let blueString = "false";
-        let blueString2 = "false";
-
-        if(hashArr[i].hasBl)blueString = "true";
-        if(hashArr[i].hasBl2)blueString2 = "true";
-        fs.rename('./sortedByHash/'+hashArr[i].imName+'.png', './sortedByHash/'+i+hashArr[i].imName+blueString+blueString2+'.png', function (err) {
-            if (err) throw err;
-            console.log('rename complete');
-          });
-    }
-}
 
