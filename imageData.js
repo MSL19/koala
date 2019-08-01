@@ -1,5 +1,7 @@
 let http = require("http");
 let fs = require('fs');
+let names = fs.readFileSync('./aspen/nameArray.json');
+let arrOfNames = JSON.parse(names);
 let nameArr = [];
 console.log(Date.now()/1000);
 function getSatData(startDate,endDate,polyId,APId){ //this pulls the JSON data on Apple stock from Alphavantage and returns the JSON
@@ -48,7 +50,6 @@ async function getI(data,num){
     let UNIdate = data[num]['dt'];
     let dateN = timeConverter(UNIdate);
     dateN += data[num]['type'].substring(0,3)+"[TR]";
-    nameArr[num] = dateN;
 
     options = {
             host: 'api.agromonitoring.com'
@@ -64,13 +65,20 @@ async function getI(data,num){
         })
     
         res.on('end', function(){
-            fs.writeFile('./aspen/'+dateN+'.png', imagedata, 'binary', function(err){
-                if (err) throw err
-                console.log('File saved.')
-            })
+           if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
+                fs.writeFile('./aspen/'+dateN+'.png', imagedata, 'binary', function(err){
+                    if (err) throw err
+                    console.log('File saved.')
+                })
+           }
+            
+
+           
         })
     
     })
+    nameArr[num] = dateN;
+
     
 }
 async function getImages(){

@@ -35,7 +35,7 @@ async function hashAnalysis(){
             console.log(i);
         }
 
-    hashArr.sort(function(b,a){return a.imHash - b.imHash}); // sorts the images in the array based off of their hashed values
+    console.log(hashArr.sort(function(b,a){return a.imHash - b.imHash})); // sorts the images in the array based off of their hashed values
     setTimeout(function reorderImages(){
     
 
@@ -51,6 +51,7 @@ async function hashAnalysis(){
                 console.log('rename complete');
               });
         }
+        console.log(hashArr);
     }, 15000)
 }
 hashAnalysis();
@@ -71,16 +72,7 @@ async function getHash(num, stop, name){
         }
          hashArr.push({hasBl:hasBlue,hasBl2: hasBlue2, imHash:parseInt(image.hash(10)),imName:name});
          console.log(name);
-         if(num === stop-1){
-           //  console.log(hashArr);
-             hashArr.sort(function(b,a){return a.imHash - b.imHash});
-             console.log(num+ "THis should be sorted...");
-
-             console.log(hashArr);
-          //  reorderImages();
-
-
-         }
+         
  
      });
 }
