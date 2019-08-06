@@ -18,6 +18,7 @@
   "homepage": "https://github.com/MSL19/koala#readme",
   "dependencies": {
     "get-pixels": "^3.3.2",
-    "jimp": "^0.6.4"
+    "jimp": "^0.6.4",
+    "socket.io": "^2.2.0"
   }
 }
