@@ -1,40 +1,21 @@
-var express = require('express');
-var app = express();
+var app = require('express')();
 var http = require('http').createServer(app);
-let fs = require('fs');
 var io = require('socket.io')(http);
-
-var name;
-var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname+'/index.html');
+let fs = require('fs');
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
+
 io.on('connection', function(socket){
-    console.log('a user connected');
+    socket.on('chat message', function(msg){
+      console.log('message: ' + msg);
+      fs.readFile('./aspen/2016+09Sep+24+18+0+0Lan[TR].png', function(err, data){
+        socket.emit('imageConversionByClient', { image: true, buffer: data });
+        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
+      });
+    });
   });
-app.post('/submit-student-data', function (req, res) {
-    name = req.body.firstName + ' ' + req.body.lastName;
-    
-//    res.send(name + ' Submitted Successfully!');
-    if(name === "TEST test"){
-        
-      var img = fs.readFileSync('./aspen/2017+06Jun+23+18+0+0Lan[TR].png');
-    
-    }
-    else{
-        var img = fs.readFileSync('./aspen/2017+04Apr+20+18+0+0Lan[TR].png');
 
-    }
-    res.writeHead(200, {'Content-Type': 'image/gif' });
-    res.end(img, 'binary');
-    
-    printName();
-});
-function printName(){
-    console.log(name);
-}
-var server = app.listen(5000, function () {
-    console.log('Node server is running..');
+http.listen(3000, function(){
+  console.log('listening on *:3000');
 });

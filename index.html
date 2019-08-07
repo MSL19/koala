@@ -1,19 +1,36 @@
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-  var socket = io();
+  $(function () {
+    var socket = io();
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+
+    socket.on('imageConversionByClient', function(data) {
+    $("#img").attr("src","data:image/png;base64,"+b64(data.buffer));
+  });
+
+  socket.on('imageConversionByServer', function(data) {
+    $("#img2").attr("src",data);
+  });
+  
+  });
 </script>
-<body>
-    <form action="/submit-student-data" method="post">
-        First Name: <input name="firstName" type="text" /> <br />
-        Last Name: <input name="lastName" type="text" /> <br />
-        <input type="submit" />
+  <body>
+        <img id="img" width="40%">
+        <img id="img2" width="40%">
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
     </form>
-</body>
+  </body>
 </html>
