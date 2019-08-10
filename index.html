@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Server Test</title>
   </head>
   <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -15,19 +15,29 @@
       return false;
     });
 
-    socket.on('imageConversionByClient', function(data) {
-    $("#img").attr("src","data:image/png;base64,"+b64(data.buffer));
-  });
+    
 
   socket.on('imageConversionByServer', function(data) {
     $("#img2").attr("src",data);
   });
   
+  
+
+  socket.on('imageConversionByServer2', function(data) {
+    $("#img4").attr("src",data);
+  });
+  
+  socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+    
   });
 </script>
   <body>
         <img id="img" width="40%">
         <img id="img2" width="40%">
+        <img id="img3" width="40%">
+        <img id="img4" width="40%">
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
