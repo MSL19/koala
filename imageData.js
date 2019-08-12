@@ -4,7 +4,7 @@ let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
 console.log(Date.now()/1000);
-function getSatData(startDate,endDate,polyId,APId){ //this pulls the JSON data on Apple stock from Alphavantage and returns the JSON
+function getSatData(startDate,endDate,polyId,APId){ 
     return new Promise(function(resolve, reject){
         let request = http.request({
             method: "GET",

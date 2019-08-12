@@ -13,7 +13,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', async function(socket){
-    socket.on('chat message', async function(msg){
+    socket.on('console message', async function(msg){
       console.log('message: ' + msg);
       fs.readFile('./aspen/2016+09Sep+24+18+0+0Lan[TR].png', function(err, data){
         socket.emit('imageConversionByClient', { image: true, buffer: data });
@@ -25,9 +25,14 @@ io.on('connection', async function(socket){
       });
       //let JSONdata = await getSatData("1401087271",Math.floor(Date.now()/1000)-100z,"5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
       //let data = JSON.stringify(JSONdata);
+      
+
+    });
+
+    socket.on("download images", async function(){
+      console.log("images downloading...")
       let N = await getImages();
       io.emit('chat message', N);
-
     });
     
     
@@ -104,7 +109,7 @@ function timeConverter(UNIX_timestamp){
 }
 
 
-function getSatData(startDate,endDate,polyId,APId){ //this pulls the JSON data on Apple stock from Alphavantage and returns the JSON
+function getSatData(startDate,endDate,polyId,APId){ 
   return new Promise(function(resolve, reject){
       let request = http2.request({
           method: "GET",

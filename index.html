@@ -8,7 +8,8 @@
 <script>
   function updateImages(){
     var socket = io.connect();
-    socket.emit('chat message')
+    console.log("client: download images");
+    socket.emit('download images')
     
   }
 
@@ -16,7 +17,7 @@
     var socket = io();
     $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
-      socket.emit('chat message', $('#m').val());
+      socket.emit('console message', $('#m').val());
       $('#m').val('');
       return false;
     });
@@ -33,7 +34,7 @@
     $("#img4").attr("src",data);
   });
   
-  socket.on('chat message', function(msg){
+  socket.on('console message', function(msg){
       $('#messages').append($('<li>').text(msg));
     });
     
@@ -47,7 +48,8 @@
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
-      <button onclick = "updateImages">Check for new Images</button>
     </form>
+    <button onclick = "updateImages()">Check for new Images</button>
+
   </body>
 </html>
