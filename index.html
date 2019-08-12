@@ -30,9 +30,7 @@
   
   
 
-  socket.on('imageConversionByServer2', function(data) {
-    $("#img4").attr("src",data);
-  });
+
   
   socket.on('console message', function(msg){
       $('#messages').append($('<li>').text(msg));
@@ -43,8 +41,7 @@
   <body>
         <img id="img" width="40%">
         <img id="img2" width="40%">
-        <img id="img3" width="40%">
-        <img id="img4" width="40%">
+       
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>

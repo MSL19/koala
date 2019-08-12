@@ -15,16 +15,24 @@ app.get('/', function(req, res){
 io.on('connection', async function(socket){
     socket.on('console message', async function(msg){
       console.log('message: ' + msg);
-      fs.readFile('./aspen/2016+09Sep+24+18+0+0Lan[TR].png', function(err, data){
+
+      if(msg.substring(0,3)==="get"){
+        console.log("getting image: "+msg.substring(3));
+
+      fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
         socket.emit('imageConversionByClient', { image: true, buffer: data });
         socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
       });
-      fs.readFile('./aspen/2016+10Oct+10+18+0+0Lan[TR].png', function(err, data){
+    
+    }
+      //CODE BLOCK FOR SECONDARY IMAGE
+      /*fs.readFile('./aspen/2016+10Oct+10+18+0+0Lan[TR].png', function(err, data){
         socket.emit('imageConversionByClient2', { image: true, buffer: data });
         socket.emit('imageConversionByServer2', "data:image/png;base64,"+ data.toString("base64"));
       });
-      //let JSONdata = await getSatData("1401087271",Math.floor(Date.now()/1000)-100z,"5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
-      //let data = JSON.stringify(JSONdata);
+      */
+     //CODE BLOCK FOR SECONDARY IMAGE
+
       
 
     });
@@ -32,7 +40,7 @@ io.on('connection', async function(socket){
     socket.on("download images", async function(){
       console.log("images downloading...")
       let N = await getImages();
-      io.emit('chat message', N);
+      io.emit('console message', N);
     });
     
     

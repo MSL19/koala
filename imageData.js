@@ -65,12 +65,12 @@ async function getI(data,num){
         })
     
         res.on('end', function(){
-          // if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
+           if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
                 fs.writeFile('./aspen/'+dateN+'.png', imagedata, 'binary', function(err){
                     if (err) throw err
                     console.log('File saved.')
                 })
-          // }
+          }
             
 
            

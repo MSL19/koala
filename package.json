@@ -1,7 +1,6 @@
 {
   "name": "koala",
   "version": "1.0.0",
-  "description": "",
   "main": "JSONdata.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,8 +16,11 @@
   },
   "homepage": "https://github.com/MSL19/koala#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "get-pixels": "^3.3.2",
     "jimp": "^0.6.4",
     "socket.io": "^2.2.0"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
