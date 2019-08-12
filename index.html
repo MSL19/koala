@@ -6,6 +6,12 @@
   <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
+  function updateImages(){
+    var socket = io.connect();
+    socket.emit('chat message')
+    
+  }
+
   $(function () {
     var socket = io();
     $('form').submit(function(e){
@@ -41,6 +47,7 @@
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
+      <button onclick = "updateImages">Check for new Images</button>
     </form>
   </body>
 </html>

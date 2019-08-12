@@ -57,20 +57,20 @@ async function getI(data,num){
           , path: IMGurl
         }
     let request = http.get(options, function(res){
-        var imagedata = ''
-        res.setEncoding('binary')
+        var imagedata = '';
+        res.setEncoding('binary');
     
         res.on('data', function(chunk){
-            imagedata += chunk
+            imagedata += chunk;
         })
     
         res.on('end', function(){
-           if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
+          // if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
                 fs.writeFile('./aspen/'+dateN+'.png', imagedata, 'binary', function(err){
                     if (err) throw err
                     console.log('File saved.')
                 })
-           }
+          // }
             
 
            
@@ -82,7 +82,7 @@ async function getI(data,num){
     
 }
 async function getImages(){
-    let JSONdata = await getSatData("1401087271",Math.floor(Date.now()/1000),"5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
+    let JSONdata = await getSatData("1401087271",Math.floor(Date.now()/1000)-100,"5d0d454d6dae90004761d30a","cda3de7380c305987a9346a110328670");
     let options;
     let numI = JSONdata.length;
     console.log(numI);
