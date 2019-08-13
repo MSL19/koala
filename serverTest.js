@@ -19,7 +19,7 @@ io.on('connection', async function(socket){
       if(msg.substring(0,3)==="get"){
         console.log("getting image: "+msg.substring(3));
         console.log(arrOfNames);
-        console.log(arrOfNames.includes("2016+10Oct+26+18+0+0Lan[TR]");)
+        console.log(arrOfNames.includes("2016+10Oct+26+18+0+0Lan[TR]"));
         if(arrOfNames.includes(msg.substring(3))){
           console.log("image "+msg.substring(3)+" is valid");
           fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
