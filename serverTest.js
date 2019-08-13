@@ -18,11 +18,12 @@ io.on('connection', async function(socket){
 
       if(msg.substring(0,3)==="get"){
         console.log("getting image: "+msg.substring(3));
-
-      fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
-        socket.emit('imageConversionByClient', { image: true, buffer: data });
-        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
-      });
+        if(arrOfNames.includes(msg.substring(3))){
+          fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
+            socket.emit('imageConversionByClient', { image: true, buffer: data });
+            socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
+          });
+        }
     
     }
       //CODE BLOCK FOR SECONDARY IMAGE
