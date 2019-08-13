@@ -18,7 +18,7 @@ io.on('connection', async function(socket){
 
       if(msg.substring(0,3)==="get"){
         console.log("getting image: "+msg.substring(3));
-        if(await arrOfNames.includes(msg.substring(3))){
+        if(["0","000","00"].includes("00")){
           console.log("image "+msg.substring(3)+" is valid");
           fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
             socket.emit('imageConversionByClient', { image: true, buffer: data });
