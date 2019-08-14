@@ -4,6 +4,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 let fs = require('fs');
 
+let currentIndex = 0;
 let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
@@ -18,13 +19,12 @@ io.on('connection', async function(socket){
 
       if(msg.substring(0,3)==="get"){
         console.log("getting image: "+msg.substring(3));
-        console.log(arrOfNames);
-        console.log(arrOfNames.includes("2016+10Oct+26+18+0+0Lan[TR]"));
         if(arrOfNames.includes(msg.substring(3))){
           console.log("image "+msg.substring(3)+" is valid");
-          fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){
-            socket.emit('imageConversionByClient', { image: true, buffer: data });
-            socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
+          currentImage = msg.substring(3);
+          currentIndex = arrOfNames.indexOf(msg.substring(3));
+          fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){ 
+            socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This works...
           });
         }
         else{
@@ -40,9 +40,6 @@ io.on('connection', async function(socket){
       });
       */
      //CODE BLOCK FOR SECONDARY IMAGE
-
-      
-
     });
 
     socket.on("download images", async function(){
@@ -50,7 +47,32 @@ io.on('connection', async function(socket){
       let N = await getImages();
       io.emit('console message', N);
     });
+
+    socket.on("select cloud-free", async function(){
+      //do some cloud analysis here lol:)
+    });
     
+    socket.on("next image", async function(){
+      currentIndex++;
+      if(currentIndex>arrOfNames.length-1) currentIndex = 0;
+      fs.readFile('./aspen/'+arrOfNames[currentIndex]+'.png', function(err, data){
+        console.log("found the file: "+arrOfNames[currentIndex]);
+        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This does not :(
+      });
+      io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
+
+    });
+
+    socket.on("prev image", async function(){
+      currentIndex--;
+      if(currentIndex<0) currentIndex = arrOfNames.length-1;
+      fs.readFile('./aspen/'+arrOfNames[currentIndex]+'.png', function(err, data){
+        console.log("found the file: "+arrOfNames[currentIndex]);
+        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
+      });
+      io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
+
+    });
     
   });
 
