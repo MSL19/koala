@@ -24,8 +24,10 @@ io.on('connection', async function(socket){
           currentImage = msg.substring(3);
           currentIndex = arrOfNames.indexOf(msg.substring(3));
           fs.readFile('./aspen/'+msg.substring(3)+'.png', function(err, data){ 
-            socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This works...
+            io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This works...
           });
+          io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
+
         }
         else{
           console.log("image "+msg.substring(3)+" is invalid");
@@ -33,13 +35,6 @@ io.on('connection', async function(socket){
         }
     
     }
-      //CODE BLOCK FOR SECONDARY IMAGE
-      /*fs.readFile('./aspen/2016+10Oct+10+18+0+0Lan[TR].png', function(err, data){
-        socket.emit('imageConversionByClient2', { image: true, buffer: data });
-        socket.emit('imageConversionByServer2', "data:image/png;base64,"+ data.toString("base64"));
-      });
-      */
-     //CODE BLOCK FOR SECONDARY IMAGE
     });
 
     socket.on("download images", async function(){
@@ -55,9 +50,10 @@ io.on('connection', async function(socket){
     socket.on("next image", async function(){
       currentIndex++;
       if(currentIndex>arrOfNames.length-1) currentIndex = 0;
-      fs.readFile('./aspen/'+arrOfNames[currentIndex]+'.png', function(err, data){
+      let imString = arrOfNames[currentIndex];
+      fs.readFile('./aspen/'+imString+'.png', function(err, data){
         console.log("found the file: "+arrOfNames[currentIndex]);
-        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This does not :(
+        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This does not :(
       });
       io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
 
@@ -68,7 +64,7 @@ io.on('connection', async function(socket){
       if(currentIndex<0) currentIndex = arrOfNames.length-1;
       fs.readFile('./aspen/'+arrOfNames[currentIndex]+'.png', function(err, data){
         console.log("found the file: "+arrOfNames[currentIndex]);
-        socket.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
+        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64"));
       });
       io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
 
