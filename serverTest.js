@@ -3,12 +3,12 @@ let http2 = require("http");
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 let fs = require('fs');
-
+var Jimp = require('jimp');
 let currentIndex = 0;
 let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
-
+let cFArchetype;
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -44,7 +44,17 @@ io.on('connection', async function(socket){
     });
 
     socket.on("select cloud-free", async function(){
-      //do some cloud analysis here lol:)
+      cFArchetype = {
+        name: arrOfNames[currentIndex], 
+        index: currentIndex
+      }
+      console.log("an image has been selected as cloud free...");
+      await Jimp.read("./aspen/"+cFArchetype.name+".png", function (err, image) {
+        let cFIhash = parseInt(image.hash(10));
+        io.emit('console message', "Hash of cloud free image: "+cFIhash);
+
+      });
+
     });
     
     socket.on("next image", async function(){
