@@ -17,6 +17,11 @@
     console.log("image selected as cloud free");
     socket.emit('select cloud-free');
   }
+  function showCFree(){
+    var socket = io.connect();
+    console.log("show cloud-free");
+    socket.emit('show cloud-free');
+  }
   function nextImage(){
     var socket = io.connect();
     console.log("showing next image");
@@ -64,6 +69,7 @@
     <button onclick = "selectImageCl()">Select Image (as cloud free)</button>
     <button onclick = "nextImage()">See Next Image</button>
     <button onclick = "prevImage()">See Previous Image</button>
+    <button onclick = "showCFree()">See Previous Image</button>
 
 
   </body>

@@ -9,10 +9,15 @@ let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
 let cFArchetype;
+let cFImage;
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
-
+async function hashDist(i){
+  await Jimp.read("./aspen/"+arrOfNames[i]+".png", function (err, image) {
+    console.log("Hash Distance for "+ arrOfNames[i]+": "+Jimp.distance(cFImage, image));
+  });
+}
 io.on('connection', async function(socket){
     socket.on('console message', async function(msg){
       console.log('message: ' + msg);
@@ -52,9 +57,15 @@ io.on('connection', async function(socket){
       await Jimp.read("./aspen/"+cFArchetype.name+".png", function (err, image) {
         let cFIhash = parseInt(image.hash(10));
         io.emit('console message', "Hash of cloud free image: "+cFIhash);
-
+        cFImage = image;
       });
 
+    });
+
+    socket.on("show cloud-free", async function(){
+      for(let i = 0; i<arrOfNames.length; i++){
+       hashDist(i);
+      }
     });
     
     socket.on("next image", async function(){
