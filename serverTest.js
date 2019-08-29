@@ -10,12 +10,18 @@ let arrOfNames = JSON.parse(names);
 let nameArr = [];
 let cFArchetype;
 let cFImage;
+let cloudFreeArr = [];
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 async function hashDist(i){
   await Jimp.read("./aspen/"+arrOfNames[i]+".png", function (err, image) {
-    console.log("Hash Distance for "+ arrOfNames[i]+": "+Jimp.distance(cFImage, image));
+    let hashDiff = Jimp.distance(cFImage, image);
+    console.log("Hash Distance for "+ arrOfNames[i]+": "+hashDiff);
+    io.emit("console message", "Hash Distance for "+ arrOfNames[i]+": "+hashDiff);
+    if(hashDiff<0.3){
+      cloudFreeArr.push(arrOfNames[i]);
+    }
   });
 }
 io.on('connection', async function(socket){
