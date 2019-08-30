@@ -22,6 +22,16 @@
     console.log("show cloud-free");
     socket.emit('show cloud-free');
   }
+  function nCl(){
+    var socket = io.connect();
+    console.log("showing next CF image");
+    socket.emit('next CF image');
+  }
+  function pCl(){
+    var socket = io.connect();
+    console.log("showing prev CF image");
+    socket.emit('prev CF image');
+  }
   function nextImage(){
     var socket = io.connect();
     console.log("showing next image");
@@ -70,6 +80,8 @@
     <button onclick = "nextImage()">See Next Image</button>
     <button onclick = "prevImage()">See Previous Image</button>
     <button onclick = "showCFree()">Analyze For Clouds</button>
+    <button onclick = "nCl()">Next Cloud Free Image</button>
+    <button onclick = "pCL()">Previous Cloud Free Image</button>
 
 
   </body>

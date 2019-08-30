@@ -5,6 +5,7 @@ var io = require('socket.io')(http);
 let fs = require('fs');
 var Jimp = require('jimp');
 let currentIndex = 0;
+let CFindex = 0;
 let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
@@ -19,7 +20,7 @@ async function hashDist(i){
     let hashDiff = Jimp.distance(cFImage, image);
     console.log("Hash Distance for "+ arrOfNames[i]+": "+hashDiff);
     io.emit("console message", "Hash Distance for "+ arrOfNames[i]+": "+hashDiff);
-    if(hashDiff<0.3){
+    if(hashDiff<0.16){
       cloudFreeArr.push(arrOfNames[i]);
     }
   });
@@ -73,14 +74,35 @@ io.on('connection', async function(socket){
        hashDist(i);
       }
     });
-    
+    socket.on("next CF image", async function(){
+      console.log(cloudFreeArr);
+
+      if(CFindex>cloudFreeArr.length)CFindex = 0;
+      let CFstring = cloudFreeArr[CFindex];
+      fs.readFile('./aspen/'+CFstring+'.png', function(err, data){
+        console.log("found the file: "+CFstring);
+        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); 
+      });
+      io.emit('console message', "showing Clouf Free image of index: "+CFindex+" name: "+CFstring);
+      CFindex++;
+    });
+    socket.on("prev CF image", async function(){
+      if(CFindex<0)CFindex = cloudFreeArr.length;
+      let CFstring = cloudFreeArr[CFindex];
+      fs.readFile('./aspen/'+CFstring+'.png', function(err, data){
+        console.log("found the file: "+cloudFreeArr[CFindex]);
+        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); 
+      });
+      io.emit('console message', "showing Clouf Free image of index: "+CFindex+" name: "+cloudFreeArr[CFindex]);
+      CFindex--;
+    });
     socket.on("next image", async function(){
       currentIndex++;
       if(currentIndex>arrOfNames.length-1) currentIndex = 0;
       let imString = arrOfNames[currentIndex];
       fs.readFile('./aspen/'+imString+'.png', function(err, data){
         console.log("found the file: "+arrOfNames[currentIndex]);
-        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); //This does not :(
+        io.emit('imageConversionByServer', "data:image/png;base64,"+ data.toString("base64")); 
       });
       io.emit('console message', "showing image of index: "+currentIndex+" name: "+arrOfNames[currentIndex]);
 
