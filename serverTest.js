@@ -25,6 +25,22 @@ async function hashDist(i){
     }
   });
 }
+
+// Neural Network Prep
+async function convoluteImage(imageName){
+  let smallMatrix = [];
+  console.log(imageName);
+  await Jimp.read("./aspen/"+imageName+".png", function (err, image){
+    for(let i =0; i<20; i++){
+      smallMatrix[i] = [];
+      for(let j = 0; j<20; j++){
+        smallMatrix[i][j] = (Jimp.intToRGBA(image.getPixelColor(i,j)));
+      }
+    }
+    console.log(smallMatrix);
+
+  });
+}
 io.on('connection', async function(socket){
     socket.on('console message', async function(msg){
       console.log('message: ' + msg);
@@ -56,7 +72,7 @@ io.on('connection', async function(socket){
     });
 
     socket.on("select cloud-free", async function(){
-      cFArchetype = {
+      /*cFArchetype = {
         name: arrOfNames[currentIndex], 
         index: currentIndex
       }
@@ -66,6 +82,8 @@ io.on('connection', async function(socket){
         io.emit('console message', "Hash of cloud free image: "+cFIhash);
         cFImage = image;
       });
+      */
+     convoluteImage(arrOfNames[3]);
 
     });
 
