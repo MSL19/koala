@@ -45,11 +45,11 @@ function timeConverter(UNIX_timestamp){
   }
 
 async function getI(data,num){
-    let IMGurl = data[num]['image']['truecolor'].substring(29);
+    let IMGurl = data[num]['image']['ndvi'].substring(29);
     console.log(IMGurl);
     let UNIdate = data[num]['dt'];
     let dateN = timeConverter(UNIdate);
-    dateN += data[num]['type'].substring(0,3)+"[TR]";
+    dateN += data[num]['type'].substring(0,3)+"[ndvi]";
 
     options = {
             host: 'api.agromonitoring.com'
@@ -66,7 +66,7 @@ async function getI(data,num){
     
         res.on('end', function(){
            if(!arrOfNames.includes(dateN)){ //seee if the file is already downloaded before re dowunloading it
-                fs.writeFile('./aspen/'+dateN+'.png', imagedata, 'binary', function(err){
+                fs.writeFile('./aspen3/'+dateN+'.png', imagedata, 'binary', function(err){
                     if (err) throw err
                     console.log('File saved.')
                 })

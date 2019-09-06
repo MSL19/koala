@@ -28,16 +28,32 @@ async function hashDist(i){
 
 // Neural Network Prep
 async function convoluteImage(imageName){
-  let smallMatrix = [];
+  let imageMatrix = [];
+  
   console.log(imageName);
   await Jimp.read("./aspen/"+imageName+".png", function (err, image){
-    for(let i =0; i<20; i++){
-      smallMatrix[i] = [];
-      for(let j = 0; j<20; j++){
-        smallMatrix[i][j] = (Jimp.intToRGBA(image.getPixelColor(i,j)));
+    if(image.bitmap.height === 173){
+      for(let i =0; i<image.bitmap.width; i++){
+        //imageMatrix[i] = [];
+        for(let j = 0; j<image.bitmap.height; j++){
+          for(let four = 0; four<4; four++){// 96664/24220 = 3.99
+           if(imageMatrix.length<96664){
+              imageMatrix.push((Jimp.intToRGBA(image.getPixelColor(i,j))));
+           }
+          }
+          
+        }
+      }      
+    }
+    else{
+    for(let i =0; i<image.bitmap.width; i++){
+      //imageMatrix[i] = [];
+      for(let j = 0; j<image.bitmap.height; j++){
+        imageMatrix.push((Jimp.intToRGBA(image.getPixelColor(i,j))));
       }
     }
-    console.log(smallMatrix);
+  }
+    console.log(imageMatrix.length);
 
   });
 }
@@ -83,7 +99,7 @@ io.on('connection', async function(socket){
         cFImage = image;
       });
       */
-     convoluteImage(arrOfNames[3]);
+     convoluteImage(arrOfNames[currentIndex]);
 
     });
 
