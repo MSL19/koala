@@ -1,5 +1,6 @@
 var app = require('express')();
 let http2 = require("http");
+const nn = require("./nn");
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 let fs = require('fs');
@@ -9,6 +10,7 @@ let CFindex = 0;
 let names = fs.readFileSync('./aspen/nameArray.json');
 let arrOfNames = JSON.parse(names);
 let nameArr = [];
+let Neur = new nn(289992, 64, 2);
 let cFArchetype;
 let cFImage;
 let cloudFreeArr = [];
@@ -53,7 +55,15 @@ async function convoluteImage(imageName){
       }
     }
   }
-    console.log(imageMatrix.length);
+    
+    let inputs = [];
+    for(let i = 0; i<imageMatrix.length; i++){
+      inputs.push(imageMatrix[i]['r']/255);
+      inputs.push(imageMatrix[i]['g'])/255;
+      inputs.push(imageMatrix[i]['b'])/255;
+    }
+    Neur.train(inputs, [1,0]);
+    console.log(Neur.predict(inputs));
 
   });
 }
