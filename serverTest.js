@@ -29,7 +29,7 @@ async function hashDist(i){
 }
 
 // Neural Network Prep
-async function convoluteImage(imageName){
+async function trainNN(imageName, trainArr){
   let imageMatrix = [];
   
   console.log(imageName);
@@ -62,8 +62,8 @@ async function convoluteImage(imageName){
       inputs.push(imageMatrix[i]['g'])/255;
       inputs.push(imageMatrix[i]['b'])/255;
     }
-    Neur.train(inputs, [1,0]);
-    console.log(Neur.predict(inputs));
+    Neur.train(inputs, trainArr); //[1,0] = cloud free
+  //  console.log(Neur.predict(inputs));
 
   });
 }
@@ -109,8 +109,63 @@ io.on('connection', async function(socket){
         cFImage = image;
       });
       */
-     convoluteImage(arrOfNames[currentIndex]);
+     trainNN(arrOfNames[currentIndex],[1,0]);
 
+    });
+
+    socket.on("select cloud-contains", async function(){
+      /*cFArchetype = {
+        name: arrOfNames[currentIndex], 
+        index: currentIndex
+      }
+      console.log("an image has been selected as cloud free...");
+      await Jimp.read("./aspen/"+cFArchetype.name+".png", function (err, image) {
+        let cFIhash = parseInt(image.hash(10));
+        io.emit('console message', "Hash of cloud free image: "+cFIhash);
+        cFImage = image;
+      });
+      */
+     trainNN(arrOfNames[currentIndex],[0,1]);
+
+    });
+
+    socket.on("prediction", async function(){
+      console.log("predicting..."+arrOfNames[currentIndex]);
+      let imageMatrix = [];
+      await Jimp.read("./aspen/"+arrOfNames[currentIndex]+".png", function (err, image){
+        if(image.bitmap.height === 173){
+          for(let i =0; i<image.bitmap.width; i++){
+            //imageMatrix[i] = [];
+            for(let j = 0; j<image.bitmap.height; j++){
+              for(let four = 0; four<4; four++){// 96664/24220 = 3.99
+               if(imageMatrix.length<96664){
+                  imageMatrix.push((Jimp.intToRGBA(image.getPixelColor(i,j))));
+               }
+              }
+              
+            }
+          }      
+        }
+        else{
+        for(let i =0; i<image.bitmap.width; i++){
+          //imageMatrix[i] = [];
+          for(let j = 0; j<image.bitmap.height; j++){
+            imageMatrix.push((Jimp.intToRGBA(image.getPixelColor(i,j))));
+          }
+        }
+      }
+   
+      let inputs = [];
+      for(let i = 0; i<imageMatrix.length; i++){
+        inputs.push(imageMatrix[i]['r']/255);
+        inputs.push(imageMatrix[i]['g'])/255;
+        inputs.push(imageMatrix[i]['b'])/255;
+      }
+      console.log(inputs);
+      let outputs = Neur.predict(inputs);
+      console.log(outputs);
+      io.emit('console message', outputs + " higher first digit = cloud free");
+    });
     });
 
     socket.on("show cloud-free", async function(){

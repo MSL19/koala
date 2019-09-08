@@ -17,6 +17,16 @@
     console.log("image selected as cloud free");
     socket.emit('select cloud-free');
   }
+  function selectImageContains(){
+    var socket = io.connect();
+    console.log("image selected as cloud contains");
+    socket.emit('select cloud-contains');
+  }
+  function getPrediction(){
+    var socket = io.connect();
+    console.log("image selected for preditcion");
+    socket.emit('prediction');
+  }
   function showCFree(){
     var socket = io.connect();
     console.log("show cloud-free");
@@ -77,6 +87,8 @@
     </form>
     <button onclick = "updateImages()">Check for new Images</button>
     <button onclick = "selectImageCl()">Select Image (as cloud free)</button>
+    <button onclick = "selectImageContains()">Select Image (as cloud contains)</button>
+    <button onclick = "getPrediction()">Get Prediction of clouds</button>
     <button onclick = "nextImage()">See Next Image</button>
     <button onclick = "prevImage()">See Previous Image</button>
     <button onclick = "showCFree()">Analyze For Clouds</button>
